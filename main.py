@@ -11,12 +11,13 @@ HEIGHT = 600
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 FPS = 60
 clock = pygame.time.Clock()
+lvl = 0
 map_list = [
-    ["0", "0", "x", "x", "x", "x", "x", "x", "x", "x", "0", "0"],
+    ["x", "x", "x", "x", "x", "x", "x", "x", "x", "x", "x", "x"],
+    ["x", "x", "x", "x", "x", "x", "x", "x", "x", "x", "x", "x"],
+    ["x", "x", "x", "x", "x", "x", "x", "x", "x", "x", "x", "x"],
     ["0", "x", "x", "x", "x", "x", "x", "x", "x", "x", "x", "0"],
-    ["x", "x", "x", "x", "x", "x", "x", "x", "x", "x", "x", "x"],
-    ["x", "x", "x", "x", "x", "x", "x", "x", "x", "x", "x", "x"],
-    ["x", "x", "x", "x", "x", "x", "x", "x", "x", "x", "x", "x"],
+    ["0", "x", "x", "x", "x", "x", "x", "x", "x", "x", "x", "0"],
 ]
 map_list_2 = [
     ["0", "0", "x", "x", "x", "0", "x", "x", "x", "x", "0", "0"],
@@ -24,6 +25,27 @@ map_list_2 = [
     ["x", "x", "0", "x", "x", "x", "x", "x", "0", "x", "x", "x"],
     ["x", "x", "x", "0", "x", "0", "x", "0", "x", "x", "x", "x"],
     ["x", "x", "x", "x", "0", "0", "0", "x", "x", "x", "x", "x"],
+]
+map_list_3 = [
+    ["0", "x", "x", "x", "x", "x", "x", "x", "x", "x", "x", "0"],
+    ["0", "x", "x", "x", "0", "0", "0", "0", "x", "x", "x", "0"],
+    ["0", "x", "x", "x", "0", "x", "x", "0", "x", "x", "x", "0"],
+    ["0", "x", "x", "x", "0", "0", "0", "0", "x", "x", "x", "0"],
+    ["0", "x", "x", "x", "x", "x", "x", "x", "x", "x", "x", "0"],
+]
+map_list_4 = [
+    ["x", "x", "x", "x", "x", "x", "x", "x", "x", "x", "x", "x"],
+    ["0", "0", "0", "0", "0", "x", "x", "0", "0", "0", "0", "0"],
+    ["x", "x", "x", "x", "x", "x", "x", "x", "x", "x", "x", "x"],
+    ["0", "0", "0", "0", "0", "x", "x", "0", "0", "0", "0", "0"],
+    ["x", "x", "x", "x", "x", "x", "x", "x", "x", "x", "x", "x"],
+]
+map_list_4 = [
+    ["x", "x", "x", "x", "x", "x", "x", "x", "x", "x", "x", "x"],
+    ["x", "0", "x", "0", "x", "x", "x", "x", "0", "x", "0", "x"],
+    ["x", "x", "x", "x", "x", "x", "x", "x", "x", "x", "x", "x"],
+    ["x", "0", "x", "0", "x", "x", "x", "x", "0", "x", "0", "x"],
+    ["x", "x", "x", "x", "x", "x", "x", "x", "x", "x", "x", "x"],
 ]
 def drawmaps(maps):
     pos = [0, 0]
@@ -54,9 +76,22 @@ class Ball(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = random.randint(0, WIDTH - 50)
         self.rect.bottom = HEIGHT - 60
-        self.speed = 10
-        self.speedx =-3
-        self.speedy =-3
+        if lvl == 0:
+            self.speedx =5
+            self.speedy =5
+        if lvl == 1:
+            self.speedx =8
+            self.speedy =8
+        if lvl == 2:
+            self.speedx =11
+            self.speedy =11
+        if lvl == 3:
+            self.speedx = 14
+            self.speedy = 14
+        if lvl == 4:
+            self.speedx = 15
+            self.speedy = 15
+
     def update(self):
         self.rect.x += self.speedx
         self.rect.y += self.speedy
@@ -65,6 +100,9 @@ class Ball(pygame.sprite.Sprite):
         if self.rect.top <= 0 or self.rect.bottom >= HEIGHT:
             self.speedy *= -1
         if pygame.sprite.spritecollide(self, Block_group, True):
+            self.speedx *= -1
+            self.speedy *= -1
+        if pygame.sprite.spritecollide(self, Platform_group, False):
             self.speedx *= -1
             self.speedy *= -1
 
@@ -81,11 +119,15 @@ class Platform(pygame.sprite.Sprite):
         self.image = platform_image
         self.rect = self.image.get_rect()
         self.rect.bottom = 600
+        self.speed = 10
     def update(self):
         key = pygame.key.get_pressed()
         if key[pygame.K_d]:
             self.rect.x += self.speed
-            self.rect.y -= self.speed
+
+        if key[pygame.K_a]:
+            self.rect.x -= self.speed
+
         if self.rect.left > 600:
             self.rectleft = 600
 
@@ -106,8 +148,7 @@ Platform_group.add(platform)
 drawmaps(map_list)
 ball = Ball()
 ball_group.add(ball)
-maps = [map_list, map_list_2]
-
+maps = [map_list, map_list_2, map_list_3, map_list_4]
 
 
 while True:
@@ -116,4 +157,9 @@ while True:
             pygame.quit()
             sys.exit()
     game()
+    if len(Block_group) == 0:
+        lvl += 1
+        ball.rect.center = 300, 400
+        drawmaps(maps[lvl])
+
     clock.tick(FPS)
