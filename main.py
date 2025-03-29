@@ -13,39 +13,38 @@ FPS = 60
 clock = pygame.time.Clock()
 lvl = 0
 map_list = [
+    ["1", "2", "x", "1", "2", "x", "1", "2", "x", "1", "2", "x"],
+    ["2", "x", "1", "2", "x", "1", "2", "x", "1", "2", "x", "1"],
+    ["x", "1", "2", "x", "1", "2", "x", "1", "2", "x", "1", "2"],
     ["x", "x", "x", "x", "x", "x", "x", "x", "x", "x", "x", "x"],
-    ["x", "x", "x", "x", "x", "x", "x", "x", "x", "x", "x", "x"],
-    ["x", "x", "x", "x", "x", "x", "x", "x", "x", "x", "x", "x"],
-    ["0", "x", "x", "x", "x", "x", "x", "x", "x", "x", "x", "0"],
-    ["0", "x", "x", "x", "x", "x", "x", "x", "x", "x", "x", "0"],
 ]
 map_list_2 = [
-    ["0", "0", "x", "x", "x", "0", "x", "x", "x", "x", "0", "0"],
-    ["0", "0", "x", "x", "x", "0", "x", "x", "x", "0", "x", "0"],
-    ["x", "x", "0", "x", "x", "x", "x", "x", "0", "x", "x", "x"],
-    ["x", "x", "x", "0", "x", "0", "x", "0", "x", "x", "x", "x"],
-    ["x", "x", "x", "x", "0", "0", "0", "x", "x", "x", "x", "x"],
+    ["0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0"],
+    ["2", "2", "2", "2", "2", "2", "2", "2", "2", "2", "2", "2"],
+    ["1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1"],
+    ["x", "x", "x", "x", "x", "x", "x", "x", "x", "x", "x", "x"],
+    ["0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0 "],
 ]
 map_list_3 = [
-    ["0", "x", "x", "x", "x", "x", "x", "x", "x", "x", "x", "0"],
-    ["0", "x", "x", "x", "0", "0", "0", "0", "x", "x", "x", "0"],
-    ["0", "x", "x", "x", "0", "x", "x", "0", "x", "x", "x", "0"],
-    ["0", "x", "x", "x", "0", "0", "0", "0", "x", "x", "x", "0"],
-    ["0", "x", "x", "x", "x", "x", "x", "x", "x", "x", "x", "0"],
+    ["0", "x", "1", "2", "0", "x", "1", "2", "0", "1", "2", "0"],
+    ["0", "x", "1", "2", "0", "x", "1", "2", "0", "1", "2", "0"],
+    ["0", "x", "1", "2", "0", "x", "1", "2", "0", "1", "0", "0"],
+    ["0", "x", "1", "2", "0", "x", "1", "2", "0", "1", "0", "0"],
+    ["0", "x", "1", "2", "0", "x", "1", "2", "0", "1", "0", "0"],
 ]
 map_list_4 = [
-    ["x", "x", "x", "x", "x", "x", "x", "x", "x", "x", "x", "x"],
+    ["2", "2", "2", "2", "0", "2", "2", "0", "2", "2", "2", "2"],
+    ["0", "0", "0", "0", "0", "1", "1", "0", "0", "0", "0", "0"],
     ["0", "0", "0", "0", "0", "x", "x", "0", "0", "0", "0", "0"],
-    ["x", "x", "x", "x", "x", "x", "x", "x", "x", "x", "x", "x"],
-    ["0", "0", "0", "0", "0", "x", "x", "0", "0", "0", "0", "0"],
-    ["x", "x", "x", "x", "x", "x", "x", "x", "x", "x", "x", "x"],
+    ["0", "0", "0", "0", "0", "2", "2", "0", "0", "0", "0", "0"],
+    ["0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0"],
 ]
-map_list_4 = [
-    ["x", "x", "x", "x", "x", "x", "x", "x", "x", "x", "x", "x"],
-    ["x", "0", "x", "0", "x", "x", "x", "x", "0", "x", "0", "x"],
-    ["x", "x", "x", "x", "x", "x", "x", "x", "x", "x", "x", "x"],
-    ["x", "0", "x", "0", "x", "x", "x", "x", "0", "x", "0", "x"],
-    ["x", "x", "x", "x", "x", "x", "x", "x", "x", "x", "x", "x"],
+map_list_5 = [
+    ["1", "0", "2", "x", "1", "0", "x", "2", "1", "0", "x", "2"],
+    ["1", "0", "x", "2", "1", "0", "2", "x", "1", "0", "2", "x"],
+    ["1", "0", "2", "x", "1", "0", "x", "2", "1", "0", "x", "1"],
+    ["1", "0", "x", "2", "1", "0", "2", "x", "1", "0", "1", "x"],
+    ["1", "0", "2", "x", "1", "0", "x", "2", "1", "0", "x", "1"],
 ]
 def drawmaps(maps):
     pos = [0, 0]
@@ -56,7 +55,12 @@ def drawmaps(maps):
             if maps[i][j] == "x":
                 block = Block(pos)
                 Block_group.add(block)
-
+            if maps[i][j] == "1":
+                block = Block_1(pos)
+                Block1_group.add(block)
+            if maps[i][j] == "2":
+                block = Block_2(pos)
+                Block2_group.add(block)
 from load import *
 
 def game():
@@ -67,6 +71,10 @@ def game():
     Platform_group.draw(screen)
     Block_group.update()
     Block_group.draw(screen)
+    Block1_group.update()
+    Block1_group.draw(screen)
+    Block2_group.update()
+    Block2_group.draw(screen)
     pygame.display.update()
 
 class Ball(pygame.sprite.Sprite):
@@ -105,6 +113,12 @@ class Ball(pygame.sprite.Sprite):
         if pygame.sprite.spritecollide(self, Platform_group, False):
             self.speedx *= -1
             self.speedy *= -1
+        if pygame.sprite.spritecollide(self, Block1_group, False):
+            block = pygame.sprite.spritecollide(self, Block1_group, False)[0]
+            block.hp -= 1
+            self.speedx *= -1
+            self.speedy *= -1
+
 
 class Block(pygame.sprite.Sprite):
     def __init__(self, pos):
@@ -112,6 +126,32 @@ class Block(pygame.sprite.Sprite):
         self.image = block_image
         self.rect = self.image.get_rect()
         self.rect.topleft = pos
+
+
+class Block_1(pygame.sprite.Sprite):
+    def __init__(self, pos):
+        pygame.sprite.Sprite.__init__(self)
+        self.image = block2_image
+        self.rect = self.image.get_rect()
+        self.rect.topleft = pos
+        self.hp = 2
+    def update(self):
+
+
+        if self.hp <= 0:
+            self.kill()
+
+
+class Block_2(pygame.sprite.Sprite):
+    def __init__(self, pos):
+        pygame.sprite.Sprite.__init__(self)
+        self.image = block3_image
+        self.rect = self.image.get_rect()
+        self.rect.topleft = pos
+        self.hp = 3
+
+
+
 
 class Platform(pygame.sprite.Sprite):
     def __init__(self):
@@ -138,6 +178,8 @@ class Platform(pygame.sprite.Sprite):
 
 ball_group = pygame.sprite.Group()
 Block_group = pygame.sprite.Group()
+Block1_group = pygame.sprite.Group()
+Block2_group = pygame.sprite.Group()
 Platform_group = pygame.sprite.Group()
 
 
@@ -148,7 +190,7 @@ Platform_group.add(platform)
 drawmaps(map_list)
 ball = Ball()
 ball_group.add(ball)
-maps = [map_list, map_list_2, map_list_3, map_list_4]
+maps = [map_list, map_list_2, map_list_3, map_list_4, map_list_5]
 
 
 while True:
@@ -157,7 +199,7 @@ while True:
             pygame.quit()
             sys.exit()
     game()
-    if len(Block_group) == 0:
+    if len(Block_group) == 12:
         lvl += 1
         ball.rect.center = 300, 400
         drawmaps(maps[lvl])
