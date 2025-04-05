@@ -3,6 +3,10 @@ import random
 import os
 import sys
 pygame.init()
+pygame.mixer.music.load('sound/fon.mp3')
+pygame.mixer.music.set_volume(0.3)
+pygame.mixer.music.play(-1)
+
 font = pygame.font.SysFont('aria', 40)
 current_path = os.path.dirname(__file__)
 os.chdir(current_path)
@@ -199,7 +203,7 @@ while True:
             pygame.quit()
             sys.exit()
     game()
-    if len(Block_group) == 12:
+    if len(Block_group) == 35:
         lvl += 1
         ball.rect.center = 300, 400
         drawmaps(maps[lvl])
