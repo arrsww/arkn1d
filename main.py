@@ -16,17 +16,25 @@ screen = pygame.display.set_mode((WIDTH, HEIGHT))
 FPS = 60
 clock = pygame.time.Clock()
 lvl = 0
+score = 0
+font = pygame.font.SysFont('arial', 30)
+lvl_menu = 'menu'
+
+
+
+
+
 map_list = [
-    ["1", "2", "x", "1", "2", "x", "1", "2", "x", "1", "2", "x"],
-    ["2", "x", "1", "2", "x", "1", "2", "x", "1", "2", "x", "1"],
-    ["x", "1", "2", "x", "1", "2", "x", "1", "2", "x", "1", "2"],
-    ["x", "x", "x", "x", "x", "x", "x", "x", "x", "x", "x", "x"],
+    ["0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0"],
+    ["0", "0", "2", "2", "2", "0", "0", "x", "x", "x", "0", "0"],
+    ["0", "0", "x", "x", "x", "0", "0", "1", "1", "1", "0", "0"],
+    ["0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0"],
 ]
 map_list_2 = [
     ["0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0"],
-    ["2", "2", "2", "2", "2", "2", "2", "2", "2", "2", "2", "2"],
-    ["1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1"],
-    ["x", "x", "x", "x", "x", "x", "x", "x", "x", "x", "x", "x"],
+    ["0", "1", "1", "2", "2", "0", "0", "x", "x", "1", "1", "0"],
+    ["0", "1", "1", "2", "2", "0", "0", "x", "x", "1", "1", "0"],
+    ["0", "1", "1", "2", "2", "0", "0", "x", "x", "1", "1", "0"],
     ["0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0 "],
 ]
 map_list_3 = [
@@ -66,9 +74,16 @@ def drawmaps(maps):
                 block = Block_2(pos)
                 Block2_group.add(block)
 from load import *
+def menu():
+    global lvl_menu
+    screen.fill('pink')
+    key = pygame.key.get_pressed()
+    if key [pygame.K_SPACE]:
+        lvl_menu = 'game'
+    pygame.display.update()
 
 def game():
-    screen.fill('grey')
+    screen.fill('pink')
     ball_group.update()
     ball_group.draw(screen)
     Platform_group.update()
@@ -79,7 +94,12 @@ def game():
     Block1_group.draw(screen)
     Block2_group.update()
     Block2_group.draw(screen)
+    text = font.render("нажмите пробел для начала игры " + str(), True, "white")
+    screen.blit(text, (10, 10))
+    text = font.render("score: " + str(score), True, "black")
+    screen.blit(text, (20, 20))
     pygame.display.update()
+
 
 class Ball(pygame.sprite.Sprite):
     def __init__(self):
@@ -104,7 +124,10 @@ class Ball(pygame.sprite.Sprite):
             self.speedx = 15
             self.speedy = 15
 
+
+
     def update(self):
+        global score
         self.rect.x += self.speedx
         self.rect.y += self.speedy
         if self.rect.left <=0 or self.rect.right >= WIDTH:
@@ -112,6 +135,7 @@ class Ball(pygame.sprite.Sprite):
         if self.rect.top <= 0 or self.rect.bottom >= HEIGHT:
             self.speedy *= -1
         if pygame.sprite.spritecollide(self, Block_group, True):
+            score += 10
             self.speedx *= -1
             self.speedy *= -1
         if pygame.sprite.spritecollide(self, Platform_group, False):
@@ -122,6 +146,10 @@ class Ball(pygame.sprite.Sprite):
             block.hp -= 1
             self.speedx *= -1
             self.speedy *= -1
+        if pygame.sprite.spritecollide(self, Block2_group, False):
+            self.speedx *= -1
+            self.speedy *= -1
+
 
 
 class Block(pygame.sprite.Sprite):
@@ -132,6 +160,7 @@ class Block(pygame.sprite.Sprite):
         self.rect.topleft = pos
 
 
+
 class Block_1(pygame.sprite.Sprite):
     def __init__(self, pos):
         pygame.sprite.Sprite.__init__(self)
@@ -140,10 +169,13 @@ class Block_1(pygame.sprite.Sprite):
         self.rect.topleft = pos
         self.hp = 2
     def update(self):
-
+        global score
 
         if self.hp <= 0:
             self.kill()
+            score += 10
+
+
 
 
 class Block_2(pygame.sprite.Sprite):
@@ -153,6 +185,15 @@ class Block_2(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.topleft = pos
         self.hp = 3
+    def update(self):
+        global score
+
+        if self.hp <= 0:
+            self.kill()
+            score += 10
+
+
+
 
 
 
@@ -202,10 +243,13 @@ while True:
         if event.type == pygame.QUIT:
             pygame.quit()
             sys.exit()
-    game()
-    if len(Block_group) == 35:
-        lvl += 1
-        ball.rect.center = 300, 400
-        drawmaps(maps[lvl])
+    if lvl_menu == 'game':
+        game()
+        if len(Block_group) == 5:
+            lvl += 1
+            ball.rect.center = 300, 400
+            drawmaps(maps[lvl])
+    elif lvl_menu == 'menu':
+        menu()
 
     clock.tick(FPS)
